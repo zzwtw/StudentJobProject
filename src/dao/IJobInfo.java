@@ -1,13 +1,12 @@
 package dao;
 
 import bean.JobInfo;
+import until.JDBCUtil;
 
 import java.sql.*;
 import java.util.ArrayList;
+
 public class IJobInfo {
-    private static String uerName = "root";
-    private static String password = "123456";
-    private static String url = "jdbc:mysql://localhost:3306/student_job?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
 //        try {
@@ -37,24 +36,62 @@ public class IJobInfo {
 //        }
 
     }
-    public static ArrayList<JobInfo> SearchAllInfo() throws SQLException, ClassNotFoundException {
-        Class.forName("com.mysql.jdbc.Driver");
-        ArrayList<JobInfo> jobInfoList = new ArrayList<JobInfo>();
-        Connection conn = DriverManager.getConnection(url,uerName,password);
-        String sql = "select date,publish_name,work_content,address from jobinfo";
-        PreparedStatement pstmt = conn.prepareStatement(sql);
-        ResultSet rs = pstmt.executeQuery();
-        while(rs.next()){
-            String date = rs.getString(1);
-            String publish_name = rs.getString(2);
-            String work_content = rs.getString(3);
-            String address = rs.getString(4);
-            JobInfo jobInfo = new JobInfo(date,publish_name,work_content,address);
-            jobInfoList.add(jobInfo);
-        }
-        System.out.println(jobInfoList);
-        return jobInfoList;
 
+    public static ArrayList<JobInfo> search(JobInfo jobInfoCondition) {
+        ArrayList<JobInfo> jobInfoList = new ArrayList<JobInfo>();
+        Connection conn = JDBCUtil.getConn();
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        try {
+            // 拼接sql
+            String sql = "select jid, date, publish_name, work_content, address from jobinfo";
+//            if (jobInfoCondition != null) {
+//                sql += "where 1 <> 1 and";
+//                if (jobInfoCondition.jid != 0) {
+//                    sql += "jid =="
+//                }
+//            }
+
+            //获取查询结果
+            pstmt = conn.prepareStatement(sql);
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                int jid = rs.getInt("jid");
+                String date = rs.getString("date");
+                String publish_name = rs.getString("publish_name");
+                String work_content = rs.getString("work_content");
+                String address = rs.getString("address");
+                int uid = rs.getInt("uid");
+                JobInfo jobInfo = new JobInfo(jid, date, publish_name, work_content, address, uid);
+                jobInfoList.add(jobInfo);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            JDBCUtil.close(conn, pstmt, rs);
+        }
+
+        return jobInfoList;
+    }
+
+    public static int publish(JobInfo job) {
+        Connection conn = JDBCUtil.getConn();
+        PreparedStatement pstmt = null;
+        int rs = 0;
+        try {
+            pstmt = conn.prepareStatement("insert into jobinfo(date, publish_name, work_content, address, uid) value(?, ?, ?, ?, ?)");
+            pstmt.setString(1, job.date);
+            pstmt.setString(2, job.publish_name);
+            pstmt.setString(3, job.work_content);
+            pstmt.setString(4, job.address);
+            pstmt.setInt(5, job.uid);
+            rs = pstmt.executeUpdate();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            JDBCUtil.close(conn, pstmt, null);
+        }
+        return rs;
     }
 
 }

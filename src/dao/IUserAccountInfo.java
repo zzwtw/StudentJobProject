@@ -1,23 +1,73 @@
 package dao;
 
+import bean.UserAccountInfo;
+import until.JDBCUtil;
+
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.ResultSet;
 
 public class IUserAccountInfo {
-    private static String uerName = "root";
-    private static String password = "123456";
-    private static String url = "jdbc:mysql://localhost:3306/student_job?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
+    public static UserAccountInfo getUserAccountInfo(int uid) {
+        Connection cnn = JDBCUtil.getConn();
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        UserAccountInfo userAccountInfo = null;
+        try {
+            pstmt = cnn.prepareStatement("select * from useracountinfo where uid = ?");
+            pstmt.setInt(1, uid);
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                userAccountInfo = new UserAccountInfo(uid,
+                        rs.getString("account"),
+                        rs.getString("password"));
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            JDBCUtil.close(cnn, pstmt, null);
+        }
+
+        return userAccountInfo;
+    }
 
     // 账号注册 将账号密码插入到数据库中
-    public static int insertUserInfo(String userAccount, String passWord) throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.jdbc.Driver");
-        Connection cnn = DriverManager.getConnection(url,uerName,password);
-        String sql = "insert into useracountinfo(`account`,`password`) values('"+userAccount+"','"+passWord+"')";
-        PreparedStatement pstmt = cnn.prepareStatement(sql);
-        int rs = pstmt.executeUpdate();
-        System.out.println(rs);
+    public static int register(UserAccountInfo userAccountInfo) {
+        Connection cnn = JDBCUtil.getConn();
+        PreparedStatement pstmt = null;
+        int rs = 0;
+        try {
+            pstmt = cnn.prepareStatement("insert into useracountinfo(`account`, `password`) values(?, ?)");
+            pstmt.setString(1, userAccountInfo.account);
+            pstmt.setString(2, userAccountInfo.password);
+            rs = pstmt.executeUpdate();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            JDBCUtil.close(cnn, pstmt, null);
+        }
+
         return rs;
+    }
+
+    public static int login(UserAccountInfo userAccountInfo) {
+        Connection cnn = JDBCUtil.getConn();
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        int uid = 0;
+        try {
+            pstmt = cnn.prepareStatement("select uid from useracountinfo where account = ? and password = ?");
+            pstmt.setString(1, userAccountInfo.account);
+            pstmt.setString(2, userAccountInfo.password);
+            rs = pstmt.executeQuery();
+            if (rs.next())
+                uid = rs.getInt(0);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            JDBCUtil.close(cnn, pstmt, null);
+        }
+
+        return uid;
     }
 }
