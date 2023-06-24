@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 /**
@@ -19,17 +20,22 @@ import java.util.ArrayList;
 @WebServlet("/job/search")
 public class SearchServlet extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         int jid = req.getParameter("jid").matches("\\d+") ? Integer.parseInt(req.getParameter("jid")) : 0;
         int uid = req.getParameter("uid").matches("\\d+") ? Integer.parseInt(req.getParameter("uid")) : 0;
-
-        ArrayList<JobInfo> jobInfos = IJobInfo.search(jid, uid);
-
+        ArrayList<JobInfo> jobInfos;
+        if(jid == 0 && uid == 0){
+            jobInfos = IJobInfo.search();
+            System.out.println(jobInfos);
+        }else {
+            jobInfos = IJobInfo.search(jid, uid);
+        }
+        ArrayList<JobInfo> finalJobInfos = jobInfos;
         ServletUtil.WriteJSONToResponse(resp, jsonObject -> {
             // 创建JSON数组，用来存JSON对象
             JSONArray jsonArray = new JSONArray();
             // 对返回的对象进行处理，封装成json对象
-            for (JobInfo jobInfo: jobInfos) {
+            for (JobInfo jobInfo: finalJobInfos) {
                 JSONObject temp = new JSONObject();
                 temp.put("jid", jobInfo.jid);
                 temp.put("name", jobInfo.name);
@@ -44,6 +50,7 @@ public class SearchServlet extends HttpServlet {
             jsonObject.put("msg", "success");
             jsonObject.put("result", jsonArray);
         });
+
     }
 
 }

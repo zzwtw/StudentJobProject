@@ -22,7 +22,8 @@ public class PublishServlet extends HttpServlet {
                 req.getParameter("description"),
                 req.getParameter("time"),
                 req.getParameter("content"),
-                Float.parseFloat(req.getParameter("salary")),
+//                Float.parseFloat(req.getParameter("salary")),
+                req.getParameter("salary"),
                 req.getParameter("address"),
                 Integer.parseInt(req.getParameter("uid"))
         );

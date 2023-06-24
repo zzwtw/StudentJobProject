@@ -24,7 +24,7 @@ public class IJobInfo {
                         resource.resultSet.getString("description"),
                         resource.resultSet.getString("time"),
                         resource.resultSet.getString("content"),
-                        resource.resultSet.getFloat("salary"),
+                        resource.resultSet.getString("salary"),
                         resource.resultSet.getString("address"),
                         resource.resultSet.getInt("uid")
                 );
@@ -38,14 +38,14 @@ public class IJobInfo {
      * 获取全部信息
      */
     public static ArrayList<JobInfo> search() {
-        return search("select * from job", null);
+        return search("select * from jobinfo", null);
     }
 
     /**
      * 搜索指定jid的工作信息
      */
     public static ArrayList<JobInfo> search(int jid, int uid) {
-        String sql = "select * from job where 1 = 1";
+        String sql = "select * from jobinfo where 1 = 1";
 
         if (jid != 0)
             sql += "and jid = " + jid;
@@ -64,7 +64,7 @@ public class IJobInfo {
             resource.statement.setString(2, jobInfo.description);
             resource.statement.setString(3, jobInfo.time);
             resource.statement.setString(4, jobInfo.content);
-            resource.statement.setFloat(5, jobInfo.salary);
+            resource.statement.setString(5, jobInfo.salary);
             resource.statement.setString(6, jobInfo.address);
             resource.statement.setInt(5, jobInfo.uid);
             resource.intResult = resource.statement.executeUpdate();

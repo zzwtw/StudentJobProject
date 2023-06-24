@@ -27,7 +27,7 @@ public class JobInfo {
     /**
      * 薪水
      */
-    public float salary;
+    public String salary;
     /**
      * 工作地址
      */
@@ -42,7 +42,7 @@ public class JobInfo {
     }
 
 
-    public JobInfo(String name, String description, String time, String content, float salary, String address, int uid) {
+    public JobInfo(String name, String description, String time, String content, String salary, String address, int uid) {
         this.time = time;
         this.name = name;
         this.content = content;
@@ -52,7 +52,7 @@ public class JobInfo {
         this.description = description;
     }
 
-    public JobInfo(int jid, String name, String description, String time, String content, float salary, String address, int uid) {
+    public JobInfo(int jid, String name, String description, String time, String content, String salary, String address, int uid) {
         this(name, description, time, content, salary, address, uid);
         this.jid = jid;
     }
