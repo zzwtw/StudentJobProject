@@ -13,7 +13,7 @@ import java.io.IOException;
 
 /**
  * 修改工作申请状态
- * */
+ */
 @WebServlet("/jobApplication/alter")
 public class AlterServlet extends HttpServlet {
     @Override
@@ -22,7 +22,7 @@ public class AlterServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp){
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
         JobApplicationInfo jobApplicationInfo = new JobApplicationInfo(
                 Integer.parseInt(req.getParameter("jid")),
                 Integer.parseInt(req.getParameter("uid")),
@@ -31,11 +31,13 @@ public class AlterServlet extends HttpServlet {
 
         int rs = IJobApplicationInfo.alter(jobApplicationInfo);
 
-        ServletUtil.WriteJSONToResponse(resp,jsonObject -> {
-            if(rs> 0){
+        ServletUtil.WriteJSONToResponse(resp, jsonObject -> {
+            if (rs > 0) {
                 //修改成功
-            }else {
+                jsonObject.put("msg", "success");
+            } else {
                 //修改失败
+                jsonObject.put("msg", "error");
             }
         });
     }
