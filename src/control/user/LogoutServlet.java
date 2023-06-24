@@ -1,13 +1,14 @@
-package control.userAccount;
+package control.user;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 
+/**
+ * 用户登出接口
+ * */
 @WebServlet("/user/logout")
 public class LogoutServlet extends HttpServlet {
     @Override

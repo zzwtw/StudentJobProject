@@ -1,6 +1,9 @@
 package bean;
 
-public class UserAccountInfo {
+/**
+ * 用户信息
+ * */
+public class UserInfo {
     /**
      * 用户id
      * */
@@ -14,16 +17,16 @@ public class UserAccountInfo {
      * */
     public String password;
 
-    public UserAccountInfo() {
+    public UserInfo() {
 
     }
 
-    public UserAccountInfo(String account, String password) {
+    public UserInfo(String account, String password) {
         this.account = account;
         this.password = password;
     }
 
-    public UserAccountInfo(int uid, String account, String password) {
+    public UserInfo(int uid, String account, String password) {
         this(account,password);
         this.uid = uid;
     }

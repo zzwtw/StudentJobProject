@@ -1,6 +1,6 @@
-package control.userAccount;
+package control.user;
 
-import bean.UserAccountInfo;
+import bean.UserInfo;
 import dao.IUserAccountInfo;
 
 import javax.servlet.ServletException;
@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * 用户登录接口
+ * */
 @WebServlet("/user/login")
 public class LoginServlet extends HttpServlet {
     @Override
@@ -23,7 +26,7 @@ public class LoginServlet extends HttpServlet {
         // 获取前端传来的数据
         String account = req.getParameter("account");
         String password = req.getParameter("password");
-        UserAccountInfo user = new UserAccountInfo(account, password);
+        UserInfo user = new UserInfo(account, password);
         // 登录账号
         int uid = IUserAccountInfo.login(user);
 

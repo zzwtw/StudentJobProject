@@ -12,7 +12,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
-@WebServlet("/jobInfo/search")
+/**
+ * 获取工作信息接口
+ * */
+@WebServlet("/job/search")
 public class SearchServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -21,14 +24,19 @@ public class SearchServlet extends HttpServlet {
 
         // 创建JSON数组，用来存JSON对象
         JSONArray jsonArray = new JSONArray();
-        ArrayList<JobInfo> jobInfo = IJobInfo.search(null);
+        ArrayList<JobInfo> jobInfos = IJobInfo.search(null);
         // 对返回的对象进行处理，封装成json对象
-        for (int i = 0; i < jobInfo.size(); i++) {
+        for (int i = 0; i < jobInfos.size(); i++) {
+            JobInfo jobInfo = jobInfos.get(i);
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("address", jobInfo.get(i).address);
-            jsonObject.put("work_content", jobInfo.get(i).work_content);
-            jsonObject.put("publish_name", jobInfo.get(i).publish_name);
-            jsonObject.put("date", jobInfo.get(i).date);
+            jsonObject.put("jid",jobInfo.jid);
+            jsonObject.put("name",jobInfo.name);
+            jsonObject.put("description",jobInfo.description);
+            jsonObject.put("time", jobInfo.time);
+            jsonObject.put("content", jobInfo.content);
+            jsonObject.put("salary", jobInfo.salary);
+            jsonObject.put("address", jobInfo.address);
+            jsonObject.put("uid", jobInfo.uid);
             jsonArray.put(jsonObject);
         }
 

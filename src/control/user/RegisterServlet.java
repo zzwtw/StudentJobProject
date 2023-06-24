@@ -1,15 +1,16 @@
-package control.userAccount;
+package control.user;
 
-import bean.UserAccountInfo;
+import bean.UserInfo;
 import dao.IUserAccountInfo;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
+/**
+ * 用户注册接口
+ * */
 @WebServlet("/user/register")
 public class RegisterServlet extends HttpServlet {
     @Override
@@ -22,9 +23,10 @@ public class RegisterServlet extends HttpServlet {
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
         // 获取前端传来的数据
-        String userAccount = req.getParameter("userAccount");
-        String password = req.getParameter("userPassword");
-        UserAccountInfo user = new UserAccountInfo(userAccount, password);
+        UserInfo user = new UserInfo(
+                req.getParameter("account"),
+                req.getParameter("password")
+        );
         // 注册账号 存入数据库中
         int rs = IUserAccountInfo.register(user);
 

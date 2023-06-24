@@ -1,6 +1,6 @@
 package dao;
 
-import bean.UserAccountInfo;
+import bean.UserInfo;
 import until.JDBCUtil;
 
 import java.sql.Connection;
@@ -8,17 +8,21 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 public class IUserAccountInfo {
-    public static UserAccountInfo getUserAccountInfo(int uid) {
+    /**
+     * 获取用户信息
+     * */
+    public static UserInfo getUserInfo(int uid) {
         Connection cnn = JDBCUtil.getConn();
         PreparedStatement pstmt = null;
         ResultSet rs = null;
-        UserAccountInfo userAccountInfo = null;
+        UserInfo userAccountInfo = null;
         try {
-            pstmt = cnn.prepareStatement("select * from useracountinfo where uid = ?");
+            pstmt = cnn.prepareStatement("select * from user where uid = ?");
             pstmt.setInt(1, uid);
             rs = pstmt.executeQuery();
             if (rs.next()) {
-                userAccountInfo = new UserAccountInfo(uid,
+                userAccountInfo = new UserInfo(
+                        uid,
                         rs.getString("account"),
                         rs.getString("password"));
             }
@@ -31,15 +35,17 @@ public class IUserAccountInfo {
         return userAccountInfo;
     }
 
-    // 账号注册 将账号密码插入到数据库中
-    public static int register(UserAccountInfo userAccountInfo) {
+    /**
+     * 账号注册
+     */
+    public static int register(UserInfo userInfo) {
         Connection cnn = JDBCUtil.getConn();
         PreparedStatement pstmt = null;
         int rs = 0;
         try {
-            pstmt = cnn.prepareStatement("insert into useracountinfo(`account`, `password`) values(?, ?)");
-            pstmt.setString(1, userAccountInfo.account);
-            pstmt.setString(2, userAccountInfo.password);
+            pstmt = cnn.prepareStatement("insert into user(account, password) values(?, ?)");
+            pstmt.setString(1, userInfo.account);
+            pstmt.setString(2, userInfo.password);
             rs = pstmt.executeUpdate();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -50,13 +56,16 @@ public class IUserAccountInfo {
         return rs;
     }
 
-    public static int login(UserAccountInfo userAccountInfo) {
+    /**
+     * 账号登录
+     * */
+    public static int login(UserInfo userAccountInfo) {
         Connection cnn = JDBCUtil.getConn();
         PreparedStatement pstmt = null;
         ResultSet rs = null;
         int uid = 0;
         try {
-            pstmt = cnn.prepareStatement("select uid from useracountinfo where account = ? and password = ?");
+            pstmt = cnn.prepareStatement("select uid from user where account = ? and password = ?");
             pstmt.setString(1, userAccountInfo.account);
             pstmt.setString(2, userAccountInfo.password);
             rs = pstmt.executeQuery();
