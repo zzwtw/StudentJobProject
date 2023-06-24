@@ -2,6 +2,8 @@ package control.jobApplication;
 
 import bean.JobApplicationInfo;
 import dao.IJobApplicationInfo;
+import org.json.JSONObject;
+import until.ServletUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,28 +15,27 @@ import java.io.IOException;
 @WebServlet("/jobApplication/apply")
 public class ApplyServlet extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         doPost(req, resp);
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
         JobApplicationInfo jobApplicationInfo = new JobApplicationInfo(
                 Integer.parseInt(req.getParameter("jid")),
                 Integer.parseInt(req.getParameter("uid"))
         );
 
         int rs = IJobApplicationInfo.apply(jobApplicationInfo);
-        try {
+
+        ServletUtil.WriteJSONToResponse(resp, jsonObject -> {
             if (rs > 0) {
                 //申请成功
-
+                jsonObject.put("msg","success");
             } else {
                 //申请失败
-
+                jsonObject.put("msg","error");
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        });
     }
 }

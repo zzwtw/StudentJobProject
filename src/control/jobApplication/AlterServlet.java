@@ -2,6 +2,7 @@ package control.jobApplication;
 
 import bean.JobApplicationInfo;
 import dao.IJobApplicationInfo;
+import until.ServletUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -30,10 +31,12 @@ public class AlterServlet extends HttpServlet {
 
         int rs = IJobApplicationInfo.alter(jobApplicationInfo);
 
-        if(rs> 0){
-            //修改成功
-        }else {
-            //修改失败
-        }
+        ServletUtil.WriteJSONToResponse(resp,jsonObject -> {
+            if(rs> 0){
+                //修改成功
+            }else {
+                //修改失败
+            }
+        });
     }
 }
