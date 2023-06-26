@@ -30,7 +30,6 @@ public class LoginServlet extends HttpServlet {
         UserInfo user = new UserInfo(account, password);
         // 登录账号
         int uid = IUserAccountInfo.login(user);
-
         ServletUtil.WriteJSONToResponse(resp, jsonObject -> {
             if (uid > 0) {
                 // 登录成功

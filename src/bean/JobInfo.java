@@ -36,13 +36,15 @@ public class JobInfo {
      * 发布者
      */
     public int uid;
-
+    /**
+     * 申请状态
+     */
+    public int status;
     public JobInfo() {
 
     }
 
-
-    public JobInfo(String name, String description, String time, String content, String salary, String address, int uid) {
+    public JobInfo(int jid,String name, String description, String time, String content, String salary, String address, int uid) {
         this.time = time;
         this.name = name;
         this.content = content;
@@ -50,10 +52,30 @@ public class JobInfo {
         this.uid = uid;
         this.salary = salary;
         this.description = description;
+        this.jid = jid;
     }
 
-    public JobInfo(int jid, String name, String description, String time, String content, String salary, String address, int uid) {
-        this(name, description, time, content, salary, address, uid);
+    public JobInfo(int jid, String name, String description, String time, String content, String salary, String address, int uid,int status) {
+//        this(name, description, time, content, salary, address, uid,status);
         this.jid = jid;
+        this.name = name;
+        this.description = description;
+        this.time = time;
+        this.content = content;
+        this.salary = salary;
+        this.address = address;
+        this.uid = uid;
+        this.status = status;
+    }
+    public JobInfo(String name, String description, String time, String content, String salary, String address, int uid,int status) {
+//        this(name, description, time, content, salary, address, uid,status);
+        this.name = name;
+        this.description = description;
+        this.time = time;
+        this.content = content;
+        this.salary = salary;
+        this.address = address;
+        this.uid = uid;
+        this.status = status;
     }
 }

@@ -35,6 +35,7 @@ public class IUserAccountInfo {
      * 账号登录
      * */
     public static int login(UserInfo userAccountInfo) {
+        System.out.println(userAccountInfo.account);
         return JDBCUtil.query("select uid from userinfo where account = '"+userAccountInfo.account+"' and password = '"+userAccountInfo.password+"'", resource -> {
 //            resource.statement.setString(1, userAccountInfo.account);
 //            resource.statement.setString(2, userAccountInfo.password);

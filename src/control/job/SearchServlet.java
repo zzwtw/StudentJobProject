@@ -24,10 +24,12 @@ public class SearchServlet extends HttpServlet {
         int jid = req.getParameter("jid").matches("\\d+") ? Integer.parseInt(req.getParameter("jid")) : 0;
         int uid = req.getParameter("uid").matches("\\d+") ? Integer.parseInt(req.getParameter("uid")) : 0;
         ArrayList<JobInfo> jobInfos;
-        if(jid == 0 && uid == 0){
+        if (jid == 0 && uid == 0) {
             jobInfos = IJobInfo.search();
             System.out.println(jobInfos);
-        }else {
+        } else if (uid != 0 && jid == 0) {
+            jobInfos = IJobInfo.search(uid);
+        } else {
             jobInfos = IJobInfo.search(jid, uid);
         }
         ArrayList<JobInfo> finalJobInfos = jobInfos;
@@ -35,7 +37,7 @@ public class SearchServlet extends HttpServlet {
             // 创建JSON数组，用来存JSON对象
             JSONArray jsonArray = new JSONArray();
             // 对返回的对象进行处理，封装成json对象
-            for (JobInfo jobInfo: finalJobInfos) {
+            for (JobInfo jobInfo : finalJobInfos) {
                 JSONObject temp = new JSONObject();
                 temp.put("jid", jobInfo.jid);
                 temp.put("name", jobInfo.name);
@@ -45,6 +47,7 @@ public class SearchServlet extends HttpServlet {
                 temp.put("salary", jobInfo.salary);
                 temp.put("address", jobInfo.address);
                 temp.put("uid", jobInfo.uid);
+                temp.put("status",jobInfo.status);
                 jsonArray.put(temp);
             }
             jsonObject.put("msg", "success");

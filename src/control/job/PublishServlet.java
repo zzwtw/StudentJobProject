@@ -25,7 +25,8 @@ public class PublishServlet extends HttpServlet {
 //                Float.parseFloat(req.getParameter("salary")),
                 req.getParameter("salary"),
                 req.getParameter("address"),
-                Integer.parseInt(req.getParameter("uid"))
+                Integer.parseInt(req.getParameter("uid")),
+                Integer.parseInt(req.getParameter("status"))
         );
 
         int rs = IJobInfo.publish(jobInfo);
