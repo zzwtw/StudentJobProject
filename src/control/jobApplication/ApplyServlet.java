@@ -23,7 +23,8 @@ public class ApplyServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
         JobApplicationInfo jobApplicationInfo = new JobApplicationInfo(
                 Integer.parseInt(req.getParameter("jid")),
-                Integer.parseInt(req.getParameter("uid"))
+                Integer.parseInt(req.getParameter("uid")),
+                Integer.parseInt(req.getParameter("status"))
         );
 
         int rs = IJobApplicationInfo.apply(jobApplicationInfo);

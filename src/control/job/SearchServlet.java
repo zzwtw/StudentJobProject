@@ -26,7 +26,6 @@ public class SearchServlet extends HttpServlet {
         ArrayList<JobInfo> jobInfos;
         if (jid == 0 && uid == 0) {
             jobInfos = IJobInfo.search();
-            System.out.println(jobInfos);
         } else if (uid != 0 && jid == 0) {
             jobInfos = IJobInfo.search(uid);
         } else {

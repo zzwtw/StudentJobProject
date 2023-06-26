@@ -29,7 +29,6 @@ public class SearchServlet extends HttpServlet {
         int filter = Integer.parseInt(req.getParameter("filter"));
 
         ArrayList<JobApplicationInfo> jobApplicationInfos = filter == 0 ? IJobApplicationInfo.serachRecieved(uid):IJobApplicationInfo.searchSend(uid);
-
         ServletUtil.WriteJSONToResponse(resp, jsonObject -> {
             JSONArray jsonArray = new JSONArray();
 
